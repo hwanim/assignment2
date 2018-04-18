@@ -11,8 +11,8 @@ public class Warehouse {
 
     public static void main(String[] args) throws FileNotFoundException {
 
-        File file = new File("src/stock.txt");
-        File tx = new File("src/tx.txt");
+        File file = new File("stock.txt");
+        File tx = new File("tx.txt");
         StringBuffer buffer = new StringBuffer();
 
         if (tx.exists()) {
@@ -28,21 +28,21 @@ public class Warehouse {
         Scanner scanner = new Scanner(file);
         Scanner tempScanner = new Scanner(file);
 
-        System.out.println(file.toString());
+//        System.out.println(file.toString());
 
         int count1 = 0;
         while (tempScanner.hasNext()) {
             tempScanner.nextLine();
             count1++;
         }
-        System.out.println(count1);
+//        System.out.println(count1);
         computerParts = new ComputerPart[count1];
 
         count1 =0;
         while (scanner.hasNext()){
             String line = scanner.nextLine();
             String[] array = line.split(",");
-            System.out.println(line);
+//            System.out.println(line);
             computerParts[count1] = new ComputerPart(array[0], array[1], array[2], array[3], array[4]);
             count1++;
         }
@@ -59,8 +59,11 @@ public class Warehouse {
                 case "I":
                     if (part == null) {
                         part = addNewPart(computerParts, inputs);
+//                        System.out.println("add new parts : " + part.name + " " + part.quantity);
+                    } else {
+                        part.quantity += Integer.parseInt(inputs[4]);
                     }
-                    part.quantity += Integer.parseInt(inputs[4]);
+
                     if (part.price > Integer.parseInt(inputs[3])) {
                         System.out.println("The part became cheap.");
                     } else if (part.price < Integer.parseInt(inputs[3])){
@@ -71,6 +74,7 @@ public class Warehouse {
                             (count + "," + inputs[0] + "," + part.id + "," + part.price + "," + inputs[4] +"," + Integer.parseInt(inputs[3]) * Integer.parseInt(inputs[4]) + "\n");
 
                     part.price = Integer.parseInt(inputs[3]);
+//                    System.out.println("input : " + part.name + " " + inputs[4] + " " + part.quantity );
 
                     break;
 
@@ -80,7 +84,10 @@ public class Warehouse {
                     }
                     buffer.append
                             (count + "," + inputs[0] + "," + part.id + "," + part.price + "," + inputs[3] +"," + Integer.parseInt(inputs[3]) * part.price + "\n");
+//                    System.out.println("before sell : " + part.quantity + "" );
                     part.quantity -= Integer.parseInt(inputs[3]);
+//                    System.out.println("after sell : " + part.quantity + "" );
+//                    System.out.println("sell : " + part.name + " " + inputs[3] );
                     break;
 
                 case "E":
@@ -89,7 +96,7 @@ public class Warehouse {
                     }
 
                     buffer.append
-                            (count + "," + inputs[0] + "," + part.id + "," + part.price + "," + inputs[3] +"," + Integer.parseInt(inputs[3]) * part.price + "\n");
+                            (count + "," + inputs[0] + "," + part.id + "," + part.price + "," + part.quantity +"," + part.quantity * part.price + "\n");
 
                     if (part.quantity < Integer.parseInt(inputs[3])) {
                         System.out.println("The part partially exchanged.");
@@ -105,7 +112,7 @@ public class Warehouse {
     private static void exitProgram(StringBuffer txBuffer) throws FileNotFoundException {
         //1. update input.txt , tx.txt, stock.txt
         //2. exit program
-        System.out.println("exit");
+//        System.out.println("exit");
         StringBuffer stockBuffer = new StringBuffer();
         for (ComputerPart cp : computerParts){
             stockBuffer.append(cp.id + "," + cp.type + "," + cp.name  + "," + cp.price + "," + cp.quantity + "\n");
